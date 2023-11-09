@@ -3,42 +3,26 @@ import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import NewWheatherCard from './NewWeatherCard';
 import { WiDaySunny } from 'react-icons/wi';
-const key = '1b473b286344e47b4f21a6bfa60c9db9';
-const keyMeteo = `&appid=${key}`;
-const apiCities = `https://api.openweathermap.org/data/2.5/weather?q=`;
+import { getMeteoData } from '../redux/action';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SerchCityInput = () => {
 	const [cityName, setCityName] = useState('');
-	const [oneCityData, setOneCityData] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const cityDataSubmit = async (e) => {
+	const dispatch = useDispatch();
+	const getMeteoDataFromState = useSelector((state) => state.countryMeteoData.dataCity[0]);
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setIsLoading(true);
-		try {
-			const cityResponse = await fetch(
-				apiCities + cityName + keyMeteo + '&units=metric&lang=en'
-			);
-			if (cityResponse.ok) {
-				const data = await cityResponse.json();
-				setTimeout(() => {
-					setOneCityData(data);
-					setCityName('');
-					setIsLoading(false);
-				}, 500);
-			} else {
-				throw new Error('Errore nel download dei dati');
-			}
-		} catch (error) {
-			console.log('Errore', error);
-			setIsLoading(false);
-		}
+		dispatch(getMeteoData(cityName, setCityName, setIsLoading));
 	};
+
 	return (
 		<>
 			<Container className='d-flex justify-content-center my-5'>
 				<Row>
 					<Col className='d-flex'>
-						<Form onSubmit={cityDataSubmit} className='d-flex'>
+						<Form onSubmit={handleSubmit} className='d-flex'>
 							<Form.Group className='d-flex'>
 								<Form.Control
 									type='search'
@@ -67,7 +51,7 @@ const SerchCityInput = () => {
 					</Spinner>
 				</div>
 			) : (
-				oneCityData && <NewWheatherCard oneCityData={oneCityData} />
+				getMeteoDataFromState && <NewWheatherCard />
 			)}
 		</>
 	);

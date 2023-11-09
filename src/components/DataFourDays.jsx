@@ -1,38 +1,22 @@
-import { useEffect, useState } from 'react';
-import OneCard from './OneCard';
+import { useEffect } from 'react';
 import { Col } from 'react-bootstrap';
-const key = '1b473b286344e47b4f21a6bfa60c9db9';
-const keyMeteo = `&appid=${key}`;
-const dataFour = `https://api.openweathermap.org/data/2.5/forecast/?q=`;
+import { useDispatch, useSelector } from 'react-redux';
+import { getForecast } from '../redux/action';
+import OneCard from './OneCard';
+const DataFourDays = () => {
+	const nameOfCity = useSelector(
+		(state) => state.countryMeteoData.dataCity[0].name && state.countryMeteoData.dataCity[0].name
+	);
 
-const DataFourDays = ({ nameOfCity }) => {
-	const [fourDayData, setfourDayData] = useState(null);
-	const fourData = async () => {
-		try {
-			const response = await fetch(dataFour + nameOfCity + keyMeteo + '&units=metric&lang=en');
-			if (response.ok) {
-				const data = await response.json();
-				setTimeout(() => {
-					setfourDayData(data.list.filter((day, index) => index % 8 === 0));
-				}, 500);
-			} else {
-				throw new Error('Errore nel download dei dati');
-			}
-		} catch (error) {
-			console.log('Errore', error);
-		}
-	};
-
+	const dispatch = useDispatch();
 	useEffect(() => {
-		if (nameOfCity) {
-			fourData();
-		}
-	}, [nameOfCity]);
+		dispatch(getForecast(nameOfCity));
+	}, []);
 
 	return (
 		<>
 			<Col className='col d-md-flex justify-content-between col-md-12'>
-				<OneCard fourDayData={fourDayData} />
+				<OneCard />
 			</Col>
 		</>
 	);

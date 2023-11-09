@@ -1,8 +1,10 @@
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 import { parseISO, format } from 'date-fns';
 import { it } from 'date-fns/locale';
-const OneCard = ({ fourDayData }) => {
-	if (!fourDayData) {
+import { useSelector } from 'react-redux';
+const OneCard = () => {
+	const dataForecast = useSelector((state) => state.forecastData.dataDays);
+	if (!dataForecast) {
 		return (
 			<div>
 				<Spinner animation='border' role='status'>
@@ -11,7 +13,7 @@ const OneCard = ({ fourDayData }) => {
 			</div>
 		);
 	}
-	return fourDayData
+	return dataForecast
 		.map((day, i) => {
 			const urlIcon = `http://openweathermap.org/img/w/${day.weather[0].icon}.png`;
 			return (
