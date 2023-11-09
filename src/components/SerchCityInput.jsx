@@ -14,9 +14,9 @@ const SerchCityInput = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		dispatch(getMeteoData(cityName, setCityName, setIsLoading));
 	};
-
 	return (
 		<>
 			<Container className='d-flex justify-content-center my-5'>

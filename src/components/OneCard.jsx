@@ -4,7 +4,7 @@ import { it } from 'date-fns/locale';
 import { useSelector } from 'react-redux';
 const OneCard = () => {
 	const dataForecast = useSelector((state) => state.forecastData.dataDays);
-	if (!dataForecast) {
+	if (!dataForecast.lenght) {
 		return (
 			<div>
 				<Spinner animation='border' role='status'>
