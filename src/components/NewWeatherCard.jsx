@@ -9,7 +9,6 @@ const NewWheatherCard = () => {
 	const getMeteoDataFromState = useSelector(
 		(state) => state.countryMeteoData.dataCity[0] && state.countryMeteoData.dataCity[0]
 	);
-	console.log(getMeteoDataFromState);
 	const urlIcon =
 		getMeteoDataFromState &&
 		`http://openweathermap.org/img/w/${getMeteoDataFromState.weather[0].icon}.png`;
